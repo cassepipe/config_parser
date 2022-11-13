@@ -1,0 +1,53 @@
+[
+ {
+  "directory": "/mnt/nfs/homes/tpouget/Desktop/config_parser",
+  "arguments": [
+   "/usr/bin/gcc",
+   "-c",
+   "-m64",
+   "-std=c++98",
+   "-Wall",
+   "-Wextra",
+   "-g3",
+   "-o",
+   "./.objs/exe/linux/x86_64/release/ConfigParser.cpp.o",
+   "ConfigParser.cpp",
+   "./.build.log"
+  ],
+  "file": "ConfigParser.cpp"
+ },
+ {
+  "directory": "/mnt/nfs/homes/tpouget/Desktop/config_parser",
+  "arguments": [
+   "/usr/bin/gcc",
+   "-c",
+   "-m64",
+   "-std=c++98",
+   "-Wall",
+   "-Wextra",
+   "-g3",
+   "-o",
+   "./.objs/exe/linux/x86_64/release/VirtServ.cpp.o",
+   "VirtServ.cpp",
+   "./.build.log"
+  ],
+  "file": "VirtServ.cpp"
+ },
+ {
+  "directory": "/mnt/nfs/homes/tpouget/Desktop/config_parser",
+  "arguments": [
+   "/usr/bin/gcc",
+   "-c",
+   "-m64",
+   "-std=c++98",
+   "-Wall",
+   "-Wextra",
+   "-g3",
+   "-o",
+   "./.objs/exe/linux/x86_64/release/main.cpp.o",
+   "main.cpp",
+   "./.build.log"
+  ],
+  "file": "main.cpp"
+ }
+]

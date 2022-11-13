@@ -95,6 +95,7 @@ class ConfigParser
 			{
 				// Look for token
 				m_is_delim = false;
+				m_buffer.clear();
 				for (; m_stream and not std::isspace(m_ch); m_stream >> m_ch)
 				{
 					if (m_delim_set.find(m_ch) != std::string::npos)
@@ -135,7 +136,7 @@ class ConfigParser
 	static const std::vector< token_dispatch_t > m_server_block_dispatch_vec;
 
 	void _parseConfig(const char* config);
-	void _match(ConfigParser::configstream_iterator it, const std::vector< token_dispatch_t >& dispatch_table, bool throw_on_not_found);
+	void _match(ConfigParser::configstream_iterator& it, const std::vector< token_dispatch_t >& dispatch_table, bool throw_on_not_found);
 	void _parseServerBlock(ConfigParser::configstream_iterator& it);
 	void _parseListen(ConfigParser::configstream_iterator& it);
 	void _parseRoot(ConfigParser::configstream_iterator& it);

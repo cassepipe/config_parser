@@ -3,4 +3,10 @@ objs
 .xmake
 .cache
 build
+.build_cache
 exe
+brk
+.objs/
+.build.log
+*.swp
+tags

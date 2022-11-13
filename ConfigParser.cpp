@@ -25,6 +25,7 @@ using std::ifstream;
 using std::string;
 using std::vector;
 using std::ostringstream;
+using std::cout;
 
 /* STATIC DATA */
 
@@ -105,11 +106,11 @@ const vector< ConfigParser::token_dispatch_t > ConfigParser::m_server_block_disp
 			vector< VirtServ* >::iterator vit          = virtserv_vec.begin();
 			vector< VirtServ* >::iterator vend         = virtserv_vec.end();
 			cout << "=========================================\n";
-			cout << "ON " << (long)(it->first.sin_addr.s_addr) <<":"<< it->first.sin_port << '\n';
+			cout << "ON " << inet_ntoa(it->first.sin_addr) <<":"<< ntohs(it->first.sin_port) << '\n';
 			cout << "=========================================\n";
 			for (; vit != vend; ++vit)
 			{
-				cout << **vit << '\n';
+				cout << **vit;
 			}
 			cout << "_________________________________________\n";
 		}
@@ -120,7 +121,7 @@ const vector< ConfigParser::token_dispatch_t > ConfigParser::m_server_block_disp
 #define BEFORE false
 #define AFTER true
 
-void ConfigParser::_match(ConfigParser::configstream_iterator it, const vector<token_dispatch_t>& dispatch_table, bool throw_on_not_found = false)
+void ConfigParser::_match(ConfigParser::configstream_iterator& it, const vector<token_dispatch_t>& dispatch_table, bool throw_on_not_found = false)
 {
 	size_t i;
 	size_t table_size = dispatch_table.size();
@@ -143,15 +144,18 @@ void ConfigParser::_parseServerBlock(ConfigParser::configstream_iterator& it)
 	++it;
 	if (*it == "{")
 	{
+		++it;
 		m_virtserv_vec.push_back(VirtServ());
 		_match(it, m_server_block_dispatch_vec);
 	}
 	else
 		throw std::runtime_error("Config file error: Missing '{' delimiter after server block directive");
+	++it;
 	if (*it != "}")
 	{
 		throw std::runtime_error("Config file error: Invalid token");
 	}
+	++it;
 }
 
 static int xatoi(const string& str)
@@ -160,8 +164,6 @@ static int xatoi(const string& str)
 	string::const_iterator end = str.end();
 	for (--end; it != end ; ++it)
 		if ( not std::isdigit(*it) )
-			throw std::runtime_error("Config file error: invalid port in listen directive ");
-	if (*it != ';')
 			throw std::runtime_error("Config file error: invalid port in listen directive ");
 	return ::atoi(str.c_str());
 }
@@ -195,6 +197,10 @@ void ConfigParser::_parseListen(ConfigParser::configstream_iterator& it)
 	if ( sockaddr.sin_addr.s_addr == INADDR_NONE )
 		throw std::runtime_error("Config file error: listen directive does not have a valid ip address");
 	sockaddr.sin_port = htons(xatoi(port.c_str()));
+
+	++it;
+	if ( *it != ";")
+		throw std::runtime_error("Config file error: listen unterminated listen directive");
 
 	m_virtserv_vec.back().m_sockaddr_vec.push_back(sockaddr);
 }

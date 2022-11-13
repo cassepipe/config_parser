@@ -6,7 +6,7 @@
 
 std::ostream& operator<<(std::ostream& os, std::vector<std::string>& vec)
 {
-	for (int i = 0; i < vec.size() ; ++i)
+	for (size_t i = 0; i < vec.size() ; ++i)
 	{
 		os << vec[i] << "\t";
 	}
@@ -15,10 +15,25 @@ std::ostream& operator<<(std::ostream& os, std::vector<std::string>& vec)
 
 std::ostream& operator<<(std::ostream& os, const VirtServ& servinfo)
 {
-	os	<< "VIRTUAL SERVER: \n" 
-		<< "\tserver_name:\t" << servinfo.m_server_name[0] << '\n'
-		<< "\troot:\t" << servinfo.m_root[0] << '\n'
-		<< "\tindex:\t" << servinfo.m_index[0] << '\n';
+	os	<< "VIRTUAL SERVER: \n";
+	os	<< "\tserver_name:\t";
+	for (size_t i = 0; i < servinfo.m_server_name.size(); ++i)
+	{
+		os << servinfo.m_server_name[i] << '\t';
+	}
+	os << '\n';
+	os	<< "\troot:\t" ;
+	for (size_t i = 0; i < servinfo.m_server_name.size(); ++i)
+	{
+		os << servinfo.m_server_name[i] << '\t';
+	}
+	os << '\n';
+	os	<< "\tindex:\t";
+	for (size_t i = 0; i < servinfo.m_server_name.size(); ++i)
+	{
+		os << servinfo.m_server_name[i] << '\t';
+	}
+	os << '\n';
 	return os;
 }
 
