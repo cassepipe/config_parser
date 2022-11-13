@@ -221,6 +221,9 @@ void ConfigParser::_parseLocationBlock(ConfigParser::configstream_iterator& it)
 	++it;
 	// Parse location data
 	_match(it, m_location_block_dispatch_vec);
+	// Give parent root directive if none was defined. Not sure if good design yet
+	if ( m_virtserv_vec.back().m_routes_vec.back().m_root.empty() )
+		m_virtserv_vec.back().m_routes_vec.back().m_root = m_virtserv_vec.back().m_root;
 	// Check for end delimiter
 	if (*it != "}")
 		throw std::runtime_error("Config file error: Invalid token");
