@@ -41,6 +41,7 @@ const vector< ConfigParser::token_dispatch_t > ConfigParser::m_block_dispatch_ve
                                                              m_block_dispatch_table + SIZE(m_block_dispatch_table));
 
 const ConfigParser::token_dispatch_t ConfigParser::m_server_block_dispatch_table[] = {
+    {"location", &ConfigParser::_parseLocationBlock},
     {"listen", &ConfigParser::_parseListen},
     {"root", &ConfigParser::_parseRoot},
     {"index", &ConfigParser::_parseIndex},
@@ -51,6 +52,16 @@ const ConfigParser::token_dispatch_t ConfigParser::m_server_block_dispatch_table
 const vector< ConfigParser::token_dispatch_t > ConfigParser::m_server_block_dispatch_vec(m_server_block_dispatch_table,
                                                                     m_server_block_dispatch_table +
                                                                         SIZE(m_server_block_dispatch_table));
+
+const ConfigParser::token_dispatch_t ConfigParser::m_location_block_dispatch_table[] = {
+    {"root", &ConfigParser::_parseLocationRoot},
+    {"autoindex", &ConfigParser::_parseLocationAutoindex},
+};
+
+// Range constructor
+const vector< ConfigParser::token_dispatch_t > ConfigParser::m_location_block_dispatch_vec(m_location_block_dispatch_table,
+                                                                    m_location_block_dispatch_table +
+                                                                        SIZE(m_location_block_dispatch_table));
 
 #undef SIZE
 
@@ -100,6 +111,7 @@ const vector< ConfigParser::token_dispatch_t > ConfigParser::m_server_block_disp
 	{
 		map< sockaddr_in, vector< VirtServ* > >::iterator it  = m_virtserv_map.begin();
 		map< sockaddr_in, vector< VirtServ* > >::iterator end = m_virtserv_map.end();
+		cout << std::boolalpha;
 		for (; it != end; ++it)
 		{
 			vector< VirtServ* >&          virtserv_vec = it->second;
@@ -139,22 +151,76 @@ void ConfigParser::_match(ConfigParser::configstream_iterator& it, const vector<
 	}
 }
 
+// Each _parse* function is responsible for consuming the terminating delimiter
+
 void ConfigParser::_parseServerBlock(ConfigParser::configstream_iterator& it)
 {
 	++it;
-	if (*it == "{")
-	{
-		++it;
-		m_virtserv_vec.push_back(VirtServ());
-		_match(it, m_server_block_dispatch_vec);
-	}
-	else
+	// Check begin delimiter
+	if (*it != "{")
 		throw std::runtime_error("Config file error: Missing '{' delimiter after server block directive");
 	++it;
-	if (*it != "}")
+	// Add a new virtual server
+	m_virtserv_vec.push_back(VirtServ());
+	// Parse virtual server data
+	_match(it, m_server_block_dispatch_vec);
+	// Insert default sockaddr_in if no `listen` directive was present
+	if (m_virtserv_vec.back().m_sockaddr_vec.empty())
 	{
-		throw std::runtime_error("Config file error: Invalid token");
+		sockaddr_in sockaddr;
+		sockaddr.sin_family = AF_INET;
+		sockaddr.sin_addr.s_addr = INADDR_ANY;
+		sockaddr.sin_port = htons(80);
+		m_virtserv_vec.back().m_sockaddr_vec.push_back(sockaddr);
 	}
+	// Check for end delimiter
+	if (*it != "}")
+		throw std::runtime_error("Config file error: Invalid token");
+	++it;
+}
+
+void ConfigParser::_parseLocationAutoindex(ConfigParser::configstream_iterator& it)
+{
+	// Can only have one argument
+	++it;
+	if ( not (*it == "on" or *it == "off") )
+		throw std::runtime_error("Config file error: Invalid argument for autoindex directive in location block: Can only be \"on\" on \"off\"");
+	m_virtserv_vec.back().m_routes_vec.back().m_root = *it;
+	++it;
+	if (*it != ";")
+		throw std::runtime_error("Config file error: missing ; after autoindex directive in location block");
+	else
+		++it;
+}
+
+void ConfigParser::_parseLocationRoot(ConfigParser::configstream_iterator& it)
+{
+	// Can only have one argument
+	if ( not m_virtserv_vec.back().m_routes_vec.back().m_root.empty() )
+		throw std::runtime_error("Config file error: Two root directives are defined in the same location block");
+	++it;
+	m_virtserv_vec.back().m_routes_vec.back().m_root = *it;
+	++it;
+	if (*it != ";")
+		throw std::runtime_error("Config file error: missing ; after root directive in location block");
+	else
+		++it;
+}
+
+void ConfigParser::_parseLocationBlock(ConfigParser::configstream_iterator& it)
+{
+	++it;
+	m_virtserv_vec.back().m_routes_vec.push_back(VirtServ::RouteOptions(*it));
+	++it;
+	// Check begin delimiter
+	if (*it != "{")
+		throw std::runtime_error("Config file error: Missing '{' delimiter after location block directive");
+	++it;
+	// Parse location data
+	_match(it, m_location_block_dispatch_vec);
+	// Check for end delimiter
+	if (*it != "}")
+		throw std::runtime_error("Config file error: Invalid token");
 	++it;
 }
 
@@ -170,6 +236,7 @@ static int xatoi(const string& str)
 
 void ConfigParser::_parseListen(ConfigParser::configstream_iterator& it)
 {
+	// Has only one arg
 	++it;
 	const string& host_port = *it;
 	string host;
@@ -198,41 +265,49 @@ void ConfigParser::_parseListen(ConfigParser::configstream_iterator& it)
 		throw std::runtime_error("Config file error: listen directive does not have a valid ip address");
 	sockaddr.sin_port = htons(xatoi(port.c_str()));
 
+	m_virtserv_vec.back().m_sockaddr_vec.push_back(sockaddr);
+
 	++it;
 	if ( *it != ";")
 		throw std::runtime_error("Config file error: listen unterminated listen directive");
-
-	m_virtserv_vec.back().m_sockaddr_vec.push_back(sockaddr);
+	else
+		++it;
 }
 
 void ConfigParser::_parseServerName(ConfigParser::configstream_iterator& it)
 {
+	// Various args possible
 	for (++it; not it.is_delim() ; ++it)
-		m_virtserv_vec.back().m_server_name.push_back(*it);
+		m_virtserv_vec.back().m_server_name_vec.push_back(*it);
 	if (*it != ";")
-	{
 		throw std::runtime_error("Config file error: missing ; after server_name directive");
-	}
+	else
+		++it;
 }
 
 void ConfigParser::_parseRoot(ConfigParser::configstream_iterator& it)
 {
-	for (++it; not it.is_delim() ; ++it)
-		m_virtserv_vec.back().m_server_name.push_back(*it);
+	// Can only have one argument
+	++it;
+	if (not m_virtserv_vec.back().m_root.empty() )
+		throw std::runtime_error("Config file error: Two root directives are defined in the same server block");
+	m_virtserv_vec.back().m_root = *it;
+	++it;
 	if (*it != ";")
-	{
 		throw std::runtime_error("Config file error: missing ; after root directive");
-	}
+	else
+		++it;
 }
 
 void ConfigParser::_parseIndex(ConfigParser::configstream_iterator& it)
 {
+	// Various args possible
 	for (++it; not it.is_delim() ; ++it)
-		m_virtserv_vec.back().m_server_name.push_back(*it);
+		m_virtserv_vec.back().m_index_vec.push_back(*it);
 	if (*it != ";")
-	{
 		throw std::runtime_error("Config file error: missing ; after index directive");
-	}
+	else
+		++it;
 }
 
 #undef BEFORE 

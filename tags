@@ -71,6 +71,8 @@ RC	makefile	/^RC=\/home\/cassepipe\/.cargo\/bin\/rustc$/;"	m
 RCAR	makefile	/^RCAR=\/home\/cassepipe\/.cargo\/bin\/rustc$/;"	m
 RCLD	makefile	/^RCLD=\/home\/cassepipe\/.cargo\/bin\/rustc$/;"	m
 RCSH	makefile	/^RCSH=\/home\/cassepipe\/.cargo\/bin\/rustc$/;"	m
+RouteOptions	VirtServ.hpp	/^		RouteOptions(std::string uri) : m_uri(uri)$/;"	f	struct:VirtServ::RouteOptions
+RouteOptions	VirtServ.hpp	/^	struct RouteOptions $/;"	s	struct:VirtServ
 SH	makefile	/^SH=\/usr\/bin\/g++$/;"	m
 SIZE	ConfigParser.cpp	/^#define SIZE(/;"	d	file:
 VIRTSERV_HPP	VirtServ.hpp	/^#define VIRTSERV_HPP$/;"	d
@@ -81,6 +83,9 @@ VirtServVector	ConfigParser.hpp	/^	typedef vector<VirtServ>								VirtServVecto
 _match	ConfigParser.cpp	/^void ConfigParser::_match(ConfigParser::configstream_iterator& it, const vector<token_dispatch_t/;"	f	class:ft::ConfigParser	typeref:typename:void
 _parseIndex	ConfigParser.cpp	/^void ConfigParser::_parseIndex(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
 _parseListen	ConfigParser.cpp	/^void ConfigParser::_parseListen(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
+_parseLocationAutoindex	ConfigParser.cpp	/^void ConfigParser::_parseLocationAutoindex(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
+_parseLocationBlock	ConfigParser.cpp	/^void ConfigParser::_parseLocationBlock(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
+_parseLocationRoot	ConfigParser.cpp	/^void ConfigParser::_parseLocationRoot(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
 _parseRoot	ConfigParser.cpp	/^void ConfigParser::_parseRoot(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
 _parseServerBlock	ConfigParser.cpp	/^void ConfigParser::_parseServerBlock(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
 _parseServerName	ConfigParser.cpp	/^void ConfigParser::_parseServerName(ConfigParser::configstream_iterator& it)$/;"	f	class:ft::ConfigParser	typeref:typename:void
@@ -113,6 +118,7 @@ isdigit	ConfigParser.cpp	/^		if ( not std::isdigit(*it) )$/;"	m	class:ft::xatoi:
 iterator	ConfigParser.hpp	/^	typedef VirtServMap::iterator							iterator;$/;"	t	class:ft::ConfigParser	typeref:typename:VirtServMap::iterator
 less	less_sockaddr.hpp	/^struct less< const sockaddr_in >$/;"	s	namespace:std
 less	less_sockaddr.hpp	/^struct less< sockaddr_in >$/;"	s	namespace:std
+m_autoindex	VirtServ.hpp	/^		bool m_autoindex;$/;"	m	struct:VirtServ::RouteOptions	typeref:typename:bool
 m_block_dispatch_table	ConfigParser.cpp	/^const ConfigParser::token_dispatch_t ConfigParser::m_block_dispatch_table[] = {$/;"	m	class:ft::ConfigParser	typeref:typename:const ConfigParser::token_dispatch_t[]
 m_block_dispatch_table	ConfigParser.hpp	/^	static const token_dispatch_t                m_block_dispatch_table[];$/;"	m	class:ft::ConfigParser	typeref:typename:const token_dispatch_t[]
 m_block_dispatch_vec	ConfigParser.cpp	/^const vector< ConfigParser::token_dispatch_t > ConfigParser::m_block_dispatch_vec(m_block_dispat/;"	m	class:ft::ConfigParser	typeref:typename:const vector<ConfigParser::token_dispatch_t>
@@ -120,16 +126,23 @@ m_block_dispatch_vec	ConfigParser.hpp	/^	static const std::vector< token_dispatc
 m_buffer	ConfigParser.hpp	/^		std::string	 			m_buffer;$/;"	m	class:ft::ConfigParser::configstream_iterator	typeref:typename:std::string
 m_ch	ConfigParser.hpp	/^		char 		 			m_ch;$/;"	m	class:ft::ConfigParser::configstream_iterator	typeref:typename:char
 m_delim_set	ConfigParser.hpp	/^		std::string	 			m_delim_set;$/;"	m	class:ft::ConfigParser::configstream_iterator	typeref:typename:std::string
-m_index	VirtServ.hpp	/^	std::vector<std::string> m_index;$/;"	m	struct:VirtServ	typeref:typename:std::vector<std::string>
+m_index_vec	VirtServ.hpp	/^	std::vector<std::string> m_index_vec;$/;"	m	struct:VirtServ	typeref:typename:std::vector<std::string>
 m_is_delim	ConfigParser.hpp	/^		bool					m_is_delim;$/;"	m	class:ft::ConfigParser::configstream_iterator	typeref:typename:bool
-m_root	VirtServ.hpp	/^	std::vector<std::string> m_root;$/;"	m	struct:VirtServ	typeref:typename:std::vector<std::string>
+m_location_block_dispatch_table	ConfigParser.cpp	/^const ConfigParser::token_dispatch_t ConfigParser::m_location_block_dispatch_table[] = {$/;"	m	class:ft::ConfigParser	typeref:typename:const ConfigParser::token_dispatch_t[]
+m_location_block_dispatch_table	ConfigParser.hpp	/^	static const token_dispatch_t                m_location_block_dispatch_table[];$/;"	m	class:ft::ConfigParser	typeref:typename:const token_dispatch_t[]
+m_location_block_dispatch_vec	ConfigParser.cpp	/^const vector< ConfigParser::token_dispatch_t > ConfigParser::m_location_block_dispatch_vec(m_loc/;"	m	class:ft::ConfigParser	typeref:typename:const vector<ConfigParser::token_dispatch_t>
+m_location_block_dispatch_vec	ConfigParser.hpp	/^	static const std::vector< token_dispatch_t > m_location_block_dispatch_vec;$/;"	m	class:ft::ConfigParser	typeref:typename:const std::vector<token_dispatch_t>
+m_root	VirtServ.hpp	/^		std::string m_root;$/;"	m	struct:VirtServ::RouteOptions	typeref:typename:std::string
+m_root	VirtServ.hpp	/^	std::string m_root;$/;"	m	struct:VirtServ	typeref:typename:std::string
+m_routes_vec	VirtServ.hpp	/^	std::vector<RouteOptions> m_routes_vec;$/;"	m	struct:VirtServ	typeref:typename:std::vector<RouteOptions>
 m_server_block_dispatch_table	ConfigParser.cpp	/^const ConfigParser::token_dispatch_t ConfigParser::m_server_block_dispatch_table[] = {$/;"	m	class:ft::ConfigParser	typeref:typename:const ConfigParser::token_dispatch_t[]
 m_server_block_dispatch_table	ConfigParser.hpp	/^	static const token_dispatch_t                m_server_block_dispatch_table[];$/;"	m	class:ft::ConfigParser	typeref:typename:const token_dispatch_t[]
 m_server_block_dispatch_vec	ConfigParser.cpp	/^const vector< ConfigParser::token_dispatch_t > ConfigParser::m_server_block_dispatch_vec(m_serve/;"	m	class:ft::ConfigParser	typeref:typename:const vector<ConfigParser::token_dispatch_t>
 m_server_block_dispatch_vec	ConfigParser.hpp	/^	static const std::vector< token_dispatch_t > m_server_block_dispatch_vec;$/;"	m	class:ft::ConfigParser	typeref:typename:const std::vector<token_dispatch_t>
-m_server_name	VirtServ.hpp	/^	std::vector<std::string> m_server_name;$/;"	m	struct:VirtServ	typeref:typename:std::vector<std::string>
+m_server_name_vec	VirtServ.hpp	/^	std::vector<std::string> m_server_name_vec;$/;"	m	struct:VirtServ	typeref:typename:std::vector<std::string>
 m_sockaddr_vec	VirtServ.hpp	/^	std::vector<sockaddr_in> m_sockaddr_vec;$/;"	m	struct:VirtServ	typeref:typename:std::vector<sockaddr_in>
 m_stream	ConfigParser.hpp	/^		std::ifstream&			m_stream;$/;"	m	class:ft::ConfigParser::configstream_iterator	typeref:typename:std::ifstream &
+m_uri	VirtServ.hpp	/^		std::string m_uri;$/;"	m	struct:VirtServ::RouteOptions	typeref:typename:std::string
 m_virtserv_map	ConfigParser.hpp	/^	VirtServMap											m_virtserv_map;$/;"	m	class:ft::ConfigParser	typeref:typename:VirtServMap
 m_virtserv_vec	ConfigParser.hpp	/^	std::vector<VirtServ>								m_virtserv_vec;$/;"	m	class:ft::ConfigParser	typeref:typename:std::vector<VirtServ>
 main	main.cpp	/^int main(int ac, char **av)$/;"	f	typeref:typename:int
@@ -138,6 +151,7 @@ operator *	ConfigParser.hpp	/^		const std::string&		operator*() { return m_buffe
 operator ++	ConfigParser.hpp	/^		configstream_iterator&	operator++() { advance(); return *this; }$/;"	f	class:ft::ConfigParser::configstream_iterator	typeref:typename:configstream_iterator &
 operator ->	ConfigParser.hpp	/^		const std::string*		operator->() { return &m_buffer; };$/;"	f	class:ft::ConfigParser::configstream_iterator	typeref:typename:const std::string *
 operator <<	VirtServ.cpp	/^std::ostream& operator<<(std::ostream& os, const VirtServ& servinfo)$/;"	f	typeref:typename:std::ostream &
+operator <<	VirtServ.cpp	/^std::ostream& operator<<(std::ostream& os, const VirtServ::RouteOptions& routeinfo)$/;"	f	typeref:typename:std::ostream &
 operator <<	VirtServ.cpp	/^std::ostream& operator<<(std::ostream& os, std::vector<std::string>& vec)$/;"	f	typeref:typename:std::ostream &
 operator []	ConfigParser.hpp	/^	const vector<VirtServ*>&	operator[](const VirtServMap::key_type& key) const$/;"	f	class:ft::ConfigParser	typeref:typename:const vector<VirtServ * > &
 parse_method	ConfigParser.hpp	/^		void (ConfigParser::*parse_method)(configstream_iterator& it);$/;"	m	struct:ft::ConfigParser::token_dispatch	typeref:typename:void (ConfigParser::*)(configstream_iterator & it)

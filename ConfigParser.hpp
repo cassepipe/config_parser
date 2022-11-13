@@ -1,7 +1,6 @@
 #ifndef CONFIGPARSER_HPP
 #define CONFIGPARSER_HPP
 
-
 #include <algorithm>
 #include <assert.h>
 #include <fstream>
@@ -132,8 +131,10 @@ class ConfigParser
 
 	static const token_dispatch_t                m_block_dispatch_table[];
 	static const token_dispatch_t                m_server_block_dispatch_table[];
+	static const token_dispatch_t                m_location_block_dispatch_table[];
 	static const std::vector< token_dispatch_t > m_block_dispatch_vec;
 	static const std::vector< token_dispatch_t > m_server_block_dispatch_vec;
+	static const std::vector< token_dispatch_t > m_location_block_dispatch_vec;
 
 	void _parseConfig(const char* config);
 	void _match(ConfigParser::configstream_iterator& it, const std::vector< token_dispatch_t >& dispatch_table, bool throw_on_not_found);
@@ -142,6 +143,9 @@ class ConfigParser
 	void _parseRoot(ConfigParser::configstream_iterator& it);
 	void _parseIndex(ConfigParser::configstream_iterator& it);
 	void _parseServerName(ConfigParser::configstream_iterator& it);
+	void _parseLocationBlock(ConfigParser::configstream_iterator& it);
+	void _parseLocationAutoindex(ConfigParser::configstream_iterator& it);
+	void _parseLocationRoot(ConfigParser::configstream_iterator& it);
 };
 
 } // namespace ft

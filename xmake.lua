@@ -1,4 +1,5 @@
 set_config("buildir", ".")
+set_config("debugger", "gdbtui")
 
 target("exe")            
     set_kind("binary")                                                             
