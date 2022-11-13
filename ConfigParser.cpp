@@ -183,9 +183,12 @@ void ConfigParser::_parseLocationAutoindex(ConfigParser::configstream_iterator& 
 {
 	// Can only have one argument
 	++it;
-	if ( not (*it == "on" or *it == "off") )
+	if ( *it == "on")
+		m_virtserv_vec.back().m_routes_vec.back().m_autoindex = true;
+	else if ( *it == "off")
+		m_virtserv_vec.back().m_routes_vec.back().m_autoindex = false;
+	else
 		throw std::runtime_error("Config file error: Invalid argument for autoindex directive in location block: Can only be \"on\" on \"off\"");
-	m_virtserv_vec.back().m_routes_vec.back().m_root = *it;
 	++it;
 	if (*it != ";")
 		throw std::runtime_error("Config file error: missing ; after autoindex directive in location block");
